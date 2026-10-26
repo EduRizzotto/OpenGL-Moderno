@@ -6,7 +6,7 @@
 // Os 'locations' abaixo correspondem exatamente aos configurados no VAO via
 // glVertexAttribPointer(location, ...) no código Python!
 
-// ★★★ [1. EXPLICAR NA APRESENTAÇÃO — ENTRADAS DO VBO CONFIGURADAS PELO VAO] ★★★
+// [6] Atributos de entrada vindos do VBO configurados pelo VAO (Posição, Cor e Normal)
 layout (location = 0) in vec3 aPos;    // Atributo 0: Posição local (X, Y, Z) -> offset 0B
 layout (location = 1) in vec3 aColor;  // Atributo 1: Cor do vértice (R, G, B) -> offset 12B
 layout (location = 2) in vec3 aNormal; // Atributo 2: Vetor Normal (Nx, Ny, Nz) -> offset 24B
@@ -47,8 +47,7 @@ void main()
     // Repassa a cor do vértice para ser interpolada na rasterização
     vColor = aColor;
 
-    // ★★★ [2. EXPLICAR NA APRESENTAÇÃO — TRANSFORMAÇÃO MVP NA GPU] ★★★
-    // v_clip = Projection * View * Model * v_local
+    // [7] Transformação MVP na GPU: Projeção * View * Model * Vértice
     gl_Position = u_projection * u_view * worldPos;
 }
 

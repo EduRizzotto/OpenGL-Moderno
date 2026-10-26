@@ -21,6 +21,7 @@ uniform float u_ambient;    // Intensidade da luz ambiente (modificável ao vivo
 
 void main()
 {
+    // [8] Cálculo da cor final (FragColor): Interpolação Baricêntrica das cores ou Iluminação de Phong
     // Modo 0: Interpolação Baricêntrica Pura (Cores dos Vértices do VBO)
     if (u_shader_mode == 0) {
         FragColor = vec4(vColor, 1.0);

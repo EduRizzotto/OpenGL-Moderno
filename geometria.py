@@ -12,14 +12,11 @@ Formato de cada vértice no VBO (9 floats = 36 bytes por vértice):
 import numpy as np
 
 
-# ============================================================================
-# ★★★ [EXPLICAR NA APRESENTAÇÃO — DADOS DO VBO (8 VÉRTICES) E EBO (36 ÍNDICES)] ★★★
-# ============================================================================
+# [1] Dados do VBO (8 vértices únicos) e EBO (36 índices formando 12 triângulos)
 def criar_cubo_indexado():
     """
     Cria um Cubo 3D usando APENAS 8 vértices únicos no VBO e 36 índices no EBO.
 
-    Por que usar EBO aqui?
     - Um cubo possui 6 faces quadradas = 12 triângulos = 36 vértices se não usarmos EBO.
     - Com o EBO, armazenamos somente os 8 cantos do cubo no VBO e dizemos para a GPU
       como conectá-los em 12 triângulos através da lista de índices!
@@ -55,9 +52,6 @@ def criar_cubo_indexado():
     return vertices, indices, info
 
 
-# ============================================================================
-# [GEOMETRIAS EXTRAS PARA DEMONSTRAÇÃO — NÃO PRECISA EXPLICAR O CÓDIGO]
-# ============================================================================
 def criar_octaedro_indexado():
     """
     Cria um Octaedro / Cristal 3D com APENAS 6 vértices únicos no VBO

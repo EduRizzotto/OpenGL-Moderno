@@ -90,10 +90,7 @@ from transformacoes import (
 )
 
 
-# ============================================================================
-# ★★★ COMPILAÇÃO DOS SHADERS GLSL] ★★★
-# Como o código dos arquivos .glsl é enviado e compilado na GPU
-# ============================================================================
+# [2] Compilação e linkagem dos Shaders GLSL na GPU
 def compilar_shader(codigo_fonte: str, tipo_shader: int) -> int:
     """Compila um Vertex ou Fragment Shader na GPU e verifica erros de sintaxe."""
     shader = glCreateShader(tipo_shader)
@@ -132,12 +129,7 @@ def criar_programa_glsl(caminho_vertex: Path, caminho_fragment: Path) -> int:
     return programa
 
 
-# ============================================================================
-# ★★★ [ — CONFIGURAÇÃO DE VAO, VBO E EBO] ★★★
-#   - VBO (GL_ARRAY_BUFFER): copia os vértices para a VRAM da GPU
-#   - EBO (GL_ELEMENT_ARRAY_BUFFER): copia os índices dos triângulos para a GPU
-#   - VAO (glVertexAttribPointer): define o stride (36 bytes) e offsets (0, 12, 24)
-# ============================================================================
+# [3] Criação de VAO, VBO (vértices), EBO (índices) e configuração de layout (stride de 36 bytes)
 def criar_vao_vbo_ebo(vertices: np.ndarray, indices: np.ndarray):
     """
     Cria e configura os 3 objetos fundamentais do OpenGL Moderno:
@@ -185,10 +177,6 @@ def criar_vao_vbo_ebo(vertices: np.ndarray, indices: np.ndarray):
     return vao, vbo, ebo, len(indices)
 
 
-# ============================================================================
-# [CÓDIGO AUXILIAR]
-# Controle de variáveis da demonstração e painel de ajuda no terminal
-# ============================================================================
 class EstadoDemonstracao:
     def __init__(self):
         self.indice_malha = 0          # 0 = Cubo, 1 = Octaedro, 2 = Malha Superfície
@@ -307,9 +295,6 @@ def main():
         _, _, _, qtd_ind, info = objetos_gpu[estado.indice_malha]
         imprimir_painel_ajuda(estado, info, qtd_ind // 3)
 
-    # ========================================================================
-    # [CÓDIGO AUXILIAR — ATALHOS DO TECLADO]
-    # ========================================================================
     def key_callback(window, key, scancode, action, mods):
         if action not in (glfw.PRESS, glfw.REPEAT):
             return
@@ -437,10 +422,7 @@ def main():
         aspecto = w / max(1, h)
         m_proj = matriz_perspectiva(estado.fov, aspecto, 0.1, 100.0)
 
-        # ====================================================================
-        # ★★★ [ ENVIO DE UNIFORMS (CPU -> GPU)] ★★★
-        # Ativa o Shader GLSL e envia as matrizes 4x4 (Model, View, Projection)
-        # ====================================================================
+        # [4] Envio de matrizes 4x4 (Model, View, Projection) via Uniforms (CPU -> GPU)
         glUseProgram(programa_shader)
         glUniformMatrix4fv(loc_model, 1, GL_TRUE, m_model)
         glUniformMatrix4fv(loc_view, 1, GL_TRUE, m_view)
@@ -452,10 +434,7 @@ def main():
         glUniform3f(loc_view_pos, pos_camera[0], pos_camera[1], pos_camera[2])
         glUniform1f(loc_ambient, estado.luz_ambiente)
 
-        # ====================================================================
-        # ★★★ [DESENHO COM VAO E EBO] ★★★
-        # Ativa o VAO e chama glDrawElements() para desenhar usando os índices do EBO!
-        # ====================================================================
+        # [5] Ativação do VAO e desenho indexado via EBO com glDrawElements()
         vao, _, _, qtd_indices_total, info = objetos_gpu[estado.indice_malha]
         if estado.triangulos_ativos is None:
             qtd_indices_desenhar = qtd_indices_total
